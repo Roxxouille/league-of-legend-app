@@ -15,8 +15,10 @@ export default function Home({ champsProps }) {
 
   return (
     <Flipper flipKey={champs} className="bg-black min-h-screen">
-      <input className="rounded bg-gray-100 ml-12 mt-10 p-2 font-bold" placeholder="Search" value={search} onChange={(e) => { setSearch(e.target.value) }} />
-      <div className="p-10 pt-0 flex flex-wrap justify-around">
+      <div className="p-10 flex flex-wrap justify-around">
+        <div className="w-full m-2 flex justify-center">
+          <input className="rounded bg-gray-100 p-2 font-bold" placeholder="Search" value={search} onChange={(e) => { setSearch(e.target.value) }} />
+        </div>
         {champs && champs.map(champ => {
           return (
             <Flipped key={champ.id} flipId={champ.id}>

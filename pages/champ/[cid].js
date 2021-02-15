@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ChampDetails from "../../components/ChampDetails";
 import PassiveCard from "../../components/PassiveCard";
 import SpellCard from "../../components/SpellCard";
 
@@ -29,9 +30,18 @@ export const getStaticProps = async (context) => {
 }
 
 const Champ = ({ champ }) => {
-    console.log(champ);
+    const [showDetails, setShowDetails] = useState(false);
+    const [currentSpell, setCurrentSpell] = useState({});
+
+    const handleDetails = (show, spell = undefined) => {
+        setShowDetails(show);
+        if (spell != undefined) {
+            setCurrentSpell(spell);
+        }
+    }
+
     return (
-        <div className="bg-black h-screen font-mono text-white font-bold">
+        <div className="bg-black font-mono text-white font-bold min-h-screen">
             <div className="flex p-12 pb-2 pt-4 cardList">
                 {champ.skins.map(skin => {
                     return (
@@ -42,27 +52,20 @@ const Champ = ({ champ }) => {
                     )
                 })}
             </div>
-            <div className="flex justify-center p-2 ">
-                <PassiveCard passive={champ.passive}/>
+            <div className="flex justify-center p-2 flex-wrap">
+                <PassiveCard passive={champ.passive} handleDetails={handleDetails} />
                 {champ.spells.map((spell, index) => {
                     return (
-                        <SpellCard spell={spell} index={index} key={spell.id}/>
+                        <SpellCard spell={spell} index={index} key={spell.id} handleDetails={handleDetails} />
                     )
                 })}
             </div>
-        </div>
-    )
+            {showDetails && (
+                <div className="flex justify-center">
+                    <ChampDetails spell={currentSpell} />
+                </div>
 
-    return (
-        <div>
-            <h1>{champ.name}</h1>
-            <img src={`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champ.name}_0.jpg`} />
-            <img src={`http://ddragon.leagueoflegends.com/cdn/11.3.1/img/passive/${champ.passive.image.full}`} />
-            {champ.spells.map(spell => {
-                return (
-                    <img src={`http://ddragon.leagueoflegends.com/cdn/11.3.1/img/spell/${spell.image.full}`} />
-                )
-            })}
+            )}
         </div>
     )
 }
